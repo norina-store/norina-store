@@ -34,11 +34,11 @@ $('#checkoutForm').addEventListener('submit',async e=>{e.preventDefault();if(!cu
  try{
   const {data,error}=await supabase.rpc('create_norina_order',{p_items:items,p_customer_name:$('#orderName').value.trim(),p_customer_phone:$('#orderPhone').value.trim(),p_delivery_address:$('#orderAddress').value.trim(),p_customer_note:$('#orderNote').value.trim()||null});
   if(error)throw error;
-  const order=data?.[0];if(!order?.order_number)throw new Error('لم نتلقَّ رقم الطلب من النظام.');
+  const order=data?.[0];if(!order?.order_number)throw new Error('لم نتلقَّ رقم الطلب من النظام.')
+   ;alert('تم حفظ طلبك بنجاح. رقم الطلب: '+order.order_number);
   const message=`مرحباً نورينا، أرسلت طلباً مبدئياً رقم ${order.order_number}. قيمة المنتجات: ${Number(order.subtotal_omr).toFixed(3)} ر.ع. أرجو التواصل معي لتحديد رسوم توصيل Yango والإجمالي النهائي. الاسم: ${$('#orderName').value.trim()}، الهاتف: ${$('#orderPhone').value.trim()}، العنوان: ${$('#orderAddress').value.trim()}`;
   const waUrl='https://wa.me/96892018802?text='+encodeURIComponent(message);
   cart={};render();closeCheckout();toast(`تم حفظ الطلب ${order.order_number}. سنتواصل معك لتحديد رسوم التوصيل.`);
- alert('تم حفظ طلبك بنجاح. رقم الطلب: '+order.order_number+'. سنتواصل معك لتحديد رسوم التوصيل.');
 if(popup)popup.location=waUrl;
 else toast('تم حفظ الطلب. رقم الطلب: '+order.order_number);
  }catch(err){if(popup)popup.close();toast(err.message||'تعذر حفظ الطلب. حاولي مرة أخرى.');}
